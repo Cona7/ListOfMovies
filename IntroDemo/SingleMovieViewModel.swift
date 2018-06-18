@@ -2,24 +2,24 @@
 import Foundation
 import AERecord
 
-class SingleReviewViewModel {
-    let review: Review
+class SingleMovieViewModel {
+    let movie: Movie
     
-    init(review: Review) {
-        self.review = review
+    init(singleMovie: Movie) {
+        self.movie = singleMovie
     }
     
     var title: String {
-        return review.title.uppercased()
+        return movie.title.uppercased()
     }
     
     var summary: String {
-        return review.summary
+        return movie.summary
     }
     
     //update summary
     func updateDescription(text: String, title: String){
-      review.summary = text
+      movie.summary = text
       try? AERecord.Context.main.save()
     }
 }

@@ -1,18 +1,18 @@
 
 import UIKit
 
-class SingleReviewViewController: UIViewController {
+class SingleMovieViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var summaryEdit: UITextView!
     
     
-    var viewModel: SingleReviewViewModel!
+    var viewModel: SingleMovieViewModel!
     
-    convenience init(viewModel: SingleReviewViewModel) {
+    convenience init(singleViewModel: SingleMovieViewModel) {
         self.init()
-        self.viewModel = viewModel
+        self.viewModel = singleViewModel
     }
     
     override func viewDidLoad() {

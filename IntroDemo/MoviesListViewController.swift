@@ -3,13 +3,13 @@ import UIKit
 import Alamofire
 import Reachability
 
-class ReviewsListViewController: UIViewController {
+class MoviesListViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
     var refreshControl: UIRefreshControl!
     
-    var viewModel: ReviewsViewModel!
+    var viewModel: MoviesViewModel!
 
     let cellReuseIdentifier = "cellReuseIdentifier"
     
@@ -19,7 +19,7 @@ class ReviewsListViewController: UIViewController {
     
     var searchText: String!
     
-    convenience init(viewModel: ReviewsViewModel, searchText: String) {
+    convenience init(viewModel: MoviesViewModel, searchText: String) {
         self.init()
         self.viewModel = viewModel
         self.searchText = searchText
@@ -77,17 +77,17 @@ class ReviewsListViewController: UIViewController {
         tableView.backgroundColor = UIColor.black
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLineEtched
         
         refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(ReviewsListViewController.refresh), for: UIControlEvents.valueChanged)
+        refreshControl.addTarget(self, action: #selector(MoviesListViewController.refresh), for: UIControlEvents.valueChanged)
         tableView.refreshControl = refreshControl
         
-        tableView.register(UINib(nibName: "ReviewTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.register(UINib(nibName: "MovieTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
     }
 
     func setupData() {
-        viewModel.fetchReviews { [weak self] (reviews) in
+        viewModel.fetchMovies { [weak self] (movies) in
             self?.refresh()
         }
     }
@@ -98,7 +98,7 @@ class ReviewsListViewController: UIViewController {
     }
 }
 
-extension ReviewsListViewController: UITableViewDelegate {
+extension MoviesListViewController: UITableViewDelegate {
     
     //ograničava da svi filmovi, odnosno redovi budu jednakih proporcija, slike
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -107,7 +107,7 @@ extension ReviewsListViewController: UITableViewDelegate {
 
     //postavi View klasu header za header
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = ReviewsTableSectionHeader()
+        let view = MoviesTableSectionHeader()
         return view
     }
 
@@ -120,24 +120,23 @@ extension ReviewsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let review = viewModel.review(atIndex: indexPath.row) {
-            let singleReviewViewModel = SingleReviewViewModel(review: review)
-            let singleReviewViewController = SingleReviewViewController(viewModel: singleReviewViewModel)
-            //singleReviewViewController.delegate = self as? EditViewControllerDelegate
-            self.navigationController?.pushViewController(singleReviewViewController, animated: true)
+        if let cellMovie = viewModel.movie(atIndex: indexPath.row) {
+            let singleMovieViewModel = SingleMovieViewModel(singleMovie: cellMovie)
+            let singleMovieViewController = SingleMovieViewController(singleViewModel: singleMovieViewModel)
+            //SingleMovieViewController.delegate = self as? EditViewControllerDelegate
+            self.navigationController?.pushViewController(singleMovieViewController, animated: true)
         }
-        
         self.refresh()
     }
-    //može se promjeniti za summary
 }
+    //može se promjeniti za summary
 
-extension ReviewsListViewController: UITableViewDataSource {
+extension MoviesListViewController: UITableViewDataSource {
     func tableView( _ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! ReviewsTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! MovieTableViewCell
 
-        if let review = viewModel.review(atIndex: indexPath.row) {
-            cell.setup(withReview: review)
+        if let movie = viewModel.movie(atIndex: indexPath.row) {
+            cell.setup(withMovie: movie)
         }
         return cell
     }
@@ -147,11 +146,11 @@ extension ReviewsListViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.numberOfReviews()
+        return viewModel.numberOfmovies()
     }
 }
 
-extension ReviewsListViewController{
+extension MoviesListViewController{
     
 //    func isReacheble() -> String{
 //        var bok: String!

@@ -4,18 +4,18 @@ import Alamofire
 import CoreData
 import AERecord
 
-class ReviewsViewModel {
+class MoviesViewModel {
     
     var searchMovieText: String!
     var baseUrl: String!
     
     //core data, model podatka iz baze.
-    var reviews: [Review]? {
-        let request: NSFetchRequest<Review> = Review.fetchRequest()
+    var movies: [Movie]? {
+        let request: NSFetchRequest<Movie> = Movie.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
         let context = AERecord.Context.main
-        let review = try? context.fetch(request)
-        return review
+        let movie = try? context.fetch(request)
+        return movie
     }
 
     let apiKey = "e4c7fc84"
@@ -23,7 +23,7 @@ class ReviewsViewModel {
     init() {
     }
 
-    func fetchReviews(completion: @escaping (([Review]?) -> Void)) -> Void {
+    func fetchMovies(completion: @escaping (([Movie]?) -> Void)) -> Void {
         guard let url = URL(string: baseUrl) else {
             completion(nil)
             return
@@ -54,14 +54,14 @@ class ReviewsViewModel {
                                     return
                                 }
                              let value = response.result.value as? [String: Any]
-                                _ = value.map({ json -> Review? in
-                                    let review = Review.createFrom(json: json)
-                                    return review
+                                _ = value.map({ json -> Movie? in
+                                    let movie = Movie.createFrom(json: json)
+                                    return movie
                                 })
                                 
                                 try? AERecord.Context.main.save()
             
-//                                completion(reviews)
+//                                completion(movies)
                                 return
                         }
                     }
@@ -73,15 +73,15 @@ class ReviewsViewModel {
         }
     }
     
-    func review(atIndex index: Int) -> Review? {
-        guard let reviews = reviews else {
+    func movie(atIndex index: Int) -> Movie? {
+        guard let movies = movies else {
             return nil
         }
-        return reviews[index]
+        return movies[index]
     }
     
-    func numberOfReviews() -> Int {
-        return reviews?.count ?? 0
+    func numberOfmovies() -> Int {
+        return movies?.count ?? 0
     }
     
 }

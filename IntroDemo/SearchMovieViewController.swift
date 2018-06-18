@@ -27,8 +27,8 @@ extension SearchMovieViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
-        let viewModel = ReviewsViewModel()
-        let viewController = ReviewsListViewController(viewModel: viewModel, searchText: movieSearchName.text!)
+        let viewModel = MoviesViewModel()
+        let viewController = MoviesListViewController(viewModel: viewModel, searchText: movieSearchName.text!)
         self.navigationController?.pushViewController(viewController, animated: true)
         
         return true

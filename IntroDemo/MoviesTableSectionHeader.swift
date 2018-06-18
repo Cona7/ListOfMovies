@@ -2,7 +2,7 @@
 import UIKit
 import PureLayout
 
-class ReviewsTableSectionHeader: UIView {
+class MoviesTableSectionHeader: UIView {
 
     var titleLabel: UILabel!
 
